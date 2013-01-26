@@ -1,7 +1,9 @@
 http = require('http')
+express = require('express')
 app = require('express').createServer()
 redis = require('redis')
 client = redis.createClient()
+helpers = require('./lib/helpers')
 io = require('socket.io').listen(app,
   log: false
 )
@@ -11,6 +13,7 @@ io.configure ->
 
 app.set 'view engine', 'ejs'
 app.set 'views', __dirname + '/views'
+app.use express.static(__dirname + '/public')
 port = process.env.PORT or 3000
 app.listen port, '0.0.0.0', ->
   console.log 'Listening on ' + port
@@ -24,10 +27,7 @@ genRouteDict = (route_list) ->
     i++
   dict
 getBus = ->
-  #io.sockets.volatile.emit('message', {
-  #  data: res
-  #});
-  http.get('http://api.transloc.com/1.1/arrival-estimates.json?agencies=176&stops=4117202,4098146', (res) ->
+  http.get('http://api.transloc.com/1.1/arrival-estimates.json?agencies=176&stops=4117202,4110166', (res) ->
     arrivals = []
     res.on 'data', (chunk) ->
       arrivals.push chunk.toString()
@@ -50,17 +50,24 @@ getBus = ->
           else
             console.log arrivals_json['data'][0]['arrivals']
             closest = []
+            now = Date.now()
+            seen_buses = []
             for arrival in arrivals_json['data'][0]['arrivals']
               arrival_time = new Date(arrival['arrival_at'])
               now = new Date()
+              within = false
               if Math.abs(arrival_time - now) < (10 * 60 * 1000)
-                #name = id_to_name[ arrival['route_id'] ]
-                #bus = {}
-                #bus[name] = arrival['arrival_at']
-                closest.push {
-                  name: id_to_name[ arrival['route_id'] ],
-                  arrival: arrival['arrival_at']
-                }
+                within = true
+              closest.push {
+                name: id_to_name[ arrival['route_id'] ],
+                arrival: arrival['arrival_at'],
+                delta: helpers.prettyDelta(arrival['arrival_at'], now),
+                within: within
+              }
+
+          closest.sort( (a, b) ->
+            a['arrival'] > b['arrival']
+          )
 
           console.log closest
           io.sockets.volatile.emit('message', {

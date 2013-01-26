@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>f</title>
+  <title>Duke Bus</title>
   <style type="text/css">
   .newest {
     color: #000;
@@ -16,17 +16,6 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
-  <script>
-    var socket = io.connect(window.location.hostname);
-    var messagesList = $('ul.buses');
-
-    socket.on('message', function (data) {
-      $('li').remove();
-      for (var i = 0; i < data.closest.length; i++) {
-        messagesList.prepend('<li>' + data.closest[i].name + ' ' + data.closest[i].arrival + '</li>');
-      }
-    });
-
-  </script>
+  <script src="./index.js"></script>
 </body>
 </html>
