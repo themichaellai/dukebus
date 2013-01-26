@@ -1,0 +1,32 @@
+<html>
+<head>
+  <title>f</title>
+  <style type="text/css">
+  .newest {
+    color: #000;
+  }
+  li {
+    color: #555;
+  }
+  </style>
+</head>
+<body>
+  <h1></h1>
+  <ul class="buses"></ul>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io.connect(window.location.hostname);
+    var messagesList = $('ul.buses');
+
+    socket.on('message', function (data) {
+      $('li').remove();
+      for (var i = 0; i < data.closest.length; i++) {
+        messagesList.prepend('<li>' + data.closest[i].name + ' ' + data.closest[i].arrival + '</li>');
+      }
+    });
+
+  </script>
+</body>
+</html>
