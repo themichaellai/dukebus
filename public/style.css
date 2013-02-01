@@ -1,0 +1,27 @@
+body {
+  text-align: center;
+  font-family: Helvetica, Arial;
+}
+.is {
+  padding: 50px;
+}
+table {
+  margin: auto;
+}
+h1 {
+  font-size: 120pt;
+  margin: 0px;
+}
+td {
+  padding: 10px;
+}
+.updated {
+  padding: 10px;
+  color: #DDD;
+}
+.disclaimer {
+  color: #FFF;
+}
+.disclaimer:hover {
+  color:#EEE;
+}

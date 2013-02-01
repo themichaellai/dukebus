@@ -1,3 +1,4 @@
+config = require('./config')
 http = require('http')
 express = require('express')
 app = require('express').createServer()
@@ -52,34 +53,38 @@ getBus = ->
             closest = []
             now = Date.now()
             seen_buses = []
-            for arrival in arrivals_json['data'][0]['arrivals']
-              arrival_time = new Date(arrival['arrival_at'])
-              now = new Date()
-              within = false
-              if Math.abs(arrival_time - now) < (10 * 60 * 1000)
-                within = true
-              closest.push {
+            closest = arrivals_json['data'][0]['arrivals'].map( (arrival) ->
+              {
                 name: id_to_name[ arrival['route_id'] ],
                 arrival: arrival['arrival_at'],
                 delta: helpers.prettyDelta(arrival['arrival_at'], now),
-                within: within
+                within: helpers.within(arrival['arrival_at'], now, 10)
               }
+            )
 
           closest.sort( (a, b) ->
             a['arrival'] > b['arrival']
           )
 
+          coming = closest[0]['within']
+          client.set(['coming', if coming then 'YES' else 'NO'], (err, reply) ->
+            client.expire('coming', (config.ttl + config.ttl_offset)/1000)
+          )
+
           console.log closest
           io.sockets.volatile.emit('message', {
-            closest: closest
+            closest: closest,
+            coming: if coming then 'YES' else 'NO'
           })
-
-
 
   ).on 'error', (e) ->
     console.log e
 
 app.get '/', (req, res) ->
-  res.render 'index'
+  client.get('coming', (err, reply) ->
+    res.render 'index', {
+      coming: reply
+    }
+  )
 
-setInterval getBus, 10000
+setInterval getBus, config.ttl

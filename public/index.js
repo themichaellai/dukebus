@@ -1,10 +1,11 @@
 var socket = io.connect(window.location.hostname);
-var messagesList = $('ul.buses');
+var messagesList = $('tbody');
 
 socket.on('message', function (data) {
-  $('li').remove();
+  $('tr').remove();
   now = Date.now();
+  $('h1').text(data.coming);
   for (var i = 0; i < data.closest.length; i++) {
-    messagesList.append('<li>' + data.closest[i].name + ' ' + data.closest[i].delta + '</li>');
+    messagesList.append('<tr><td>' + data.closest[i].name + '</td><td>' + data.closest[i].delta + '</td></tr></li>');
   }
 });
