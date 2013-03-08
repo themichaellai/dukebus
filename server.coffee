@@ -7,6 +7,7 @@ redis = require('redis')
 client = redis.createClient()
 helpers = require('./lib/helpers')
 transloc = require('./lib/transloc')
+bus = require('./routes/bus')
 io = require('socket.io').listen(app,
   log: false
 )
@@ -75,12 +76,7 @@ getBus = ->
 #  ).on 'error', (e) ->
 #    console.log e
 
-app.get '/', (req, res) ->
-  client.get('coming', (err, reply) ->
-    res.render 'index', {
-      coming: reply
-    }
-  )
+app.get '/', bus.index
 
 # Get route and stop names before starting
 console.log 'mapping route names'

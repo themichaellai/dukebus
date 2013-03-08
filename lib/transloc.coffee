@@ -51,6 +51,7 @@ transloc.getTimeData = (stop_id_to_name, route_id_to_name, callback) ->
             _.each(stop['arrivals'], (arrival, i, arrivals) ->
               named_arrivals.push {
                 'route_name': route_id_to_name[arrival['route_id']],
+                'route_id': arrival['route_id'],
                 'arrival_at': arrival['arrival_at']
               }
             )
@@ -58,7 +59,8 @@ transloc.getTimeData = (stop_id_to_name, route_id_to_name, callback) ->
             # push arrivals and stop_name onto list of stops
             named_stops.push {
               'arrivals': named_arrivals,
-              'stop_name': stop_id_to_name[stop['stop_id']]
+              'stop_name': stop_id_to_name[stop['stop_id']],
+              'stop_id': stop['stop_id']
             }
         )
       callback(named_stops)
