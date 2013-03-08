@@ -10,3 +10,6 @@ socket.on('message', function (data) {
     messagesList.append('<tr><td>' + data.closest[i].name + '</td><td>' + data.closest[i].delta + '</td></tr></li>');
   }
 });
+socket.on('bus data', function (data) {
+  console.log(data);
+});
