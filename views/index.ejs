@@ -2,6 +2,7 @@
 <head>
   <title>Duke Bus</title>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
   <style type="text/css" src="./style.css"></style>
   <link rel="stylesheet" type="text/css" href="./style.css">
   <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
@@ -19,15 +20,15 @@
 </head>
 <body ng-controller="StopListCtrl">
   <div class="row">
-    <div class="span3">
+    <div class="span4">
       <h1>Stops</h1>
       <ul>
-        <li ng-click="selectStop(stop)" ng-repeat="stop in stops">
-          <a ng-href="#/buses/{{stop.stop_id}}">{{stop.stop_name}}</a>
+        <li ng-click="selectStop(stop)" ng-repeat="stop in stop_names | orderBy:'stop_name'">
+          <a ng-href="#/stops/{{stop.stop_id}}">{{stop.stop_name}}</a>
         </li>
       </ul>
     </div>
-    <div class="span9" ng-view>
+    <div class="span8" ng-view>
     </div>
   </div>
 

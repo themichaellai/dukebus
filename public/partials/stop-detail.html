@@ -1,6 +1,7 @@
-<h1>Stop: {{ selected_stop.stop_name }}</h1>
-<ul>
-  <li ng-repeat="arrival in selected_stop['arrivals']">
-    {{ arrival.route_name }}
-  </li>
-</ul>
+<h1>{{ stops[selected_id].stop_name }}</h1>
+<table>
+  <tr ng-repeat="arrival in stops[selected_id]['arrivals']">
+    <td>{{ arrival.route_name }}</td>
+    <td>{{ arrival.arrival_at }}</td>
+  </tr>
+</table>

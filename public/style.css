@@ -1,6 +1,4 @@
 body {
-  text-align: center;
-  font-family: Helvetica, Arial;
 }
 .is {
   padding: 50px;
@@ -24,4 +22,7 @@ td {
 }
 .disclaimer:hover {
   color:#EEE;
+}
+li {
+  list-style-type: none;
 }

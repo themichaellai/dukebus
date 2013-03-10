@@ -42,7 +42,8 @@ transloc.getTimeData = (stop_id_to_name, route_id_to_name, callback) ->
       if json['data'].length == 0
         stops = []
       else
-        named_stops = []
+        named_stops = {}
+        #named_stops = []
         now = Date.now()
         _.each(json['data'], (stop, i, stops) ->
           # exchange route_id with route_name for all arrivals
@@ -57,7 +58,7 @@ transloc.getTimeData = (stop_id_to_name, route_id_to_name, callback) ->
             )
 
             # push arrivals and stop_name onto list of stops
-            named_stops.push {
+            named_stops[stop['stop_id']] = {
               'arrivals': named_arrivals,
               'stop_name': stop_id_to_name[stop['stop_id']],
               'stop_id': stop['stop_id']
